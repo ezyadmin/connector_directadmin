@@ -111,4 +111,11 @@
     minute: "0"
     hour: "1"
     job: "perl -le 'sleep rand 9000' && /usr/local/ezyadmin/agent/ezyadmin_patchmgr_update.sh"
+
+- name: Register EzyAdmin Connector
+  include: 99_register_ezyadmin_connector.yaml
+  when:
+    - register_ezyadmin_connector
+    - ezyadmin.api_url is defined
+    - ezyadmin.connector_id is defined
 # ============= Default Task ===============
