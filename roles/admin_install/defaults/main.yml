@@ -18,3 +18,6 @@
 
 #perl_packages
 perl_packages : [ "YAML", "JSON", "Linux::Distribution"]
+register_connector: true
+ezyadmin_api_url: https://api.netway.ezyadmin.com
+ezyadmin_connector: directadmin
