@@ -10,22 +10,28 @@
         mode: "0755"
       become: True
 
-    # - name: Download file
-    #   get_url:
-    #     url: https://github.com/ezyadmin/connector_patch_manager/archive/latest.tar.gz
-    #     dest: /usr/local/ezyadmin/connector_patch_manager.tar.gz
-    #   become: True
-
-    # - name: tar file
-    #   shell: tar -zxvf /usr/local/ezyadmin/connector_patch_manager.tar.gz -C /usr/local/ezyadmin
-    #   become: True
-
-    - name: Download my software from internal IT repository and extract the package
-      unarchive:
-        src: "https://github.com/ezyadmin/connector_patch_manager/archive/latest.tar.gz"
-        dest: "/usr/local/ezyadmin"
-        remote_src: yes
+    - name: Download file
+      get_url:
+        url: https://github.com/ezyadmin/connector_patch_manager/archive/latest.tar.gz
+        dest: /usr/local/ezyadmin/connector_patch_manager.tar.gz
       become: True
+
+    - name: tar file
+      shell: tar -zxvf /usr/local/ezyadmin/connector_patch_manager.tar.gz -C /usr/local/ezyadmin
+      become: True
+
+    #- name: Download my software from internal IT repository and extract the package
+    #  unarchive:
+    #    src: "https://github.com/ezyadmin/connector_patch_manager/archive/latest.tar.gz"
+    #    dest: "/usr/local/ezyadmin"
+    #    remote_src: yes
+    #  become: True
+    #- name: Download my software from internal IT repository and extract the package
+    #  unarchive:
+    #    src: "/usr/local/ezyadmin/connector_patch_manager.tar.gz"
+    #    dest: "/usr/local/ezyadmin"
+    #    remote_src: yes
+    #  become: True
       
     - name: Execute the script
       command: sh /usr/local/ezyadmin/connector_patch_manager-latest/install/install.sh
@@ -34,5 +40,7 @@
       become: True
 
     - name: Execute the script
-      command: /usr/local/bin/ezinstall_patch_mgr --all
+      command: /usr/local/bin/ezinstall_patch_mgr --da
+      register: command_exec
+      ignore_errors: True
       become: True
