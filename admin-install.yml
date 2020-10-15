@@ -25,8 +25,16 @@
       become: True
       ignore_errors: True
 
+    # - name: Setup
+    #   shell: /usr/local/ezyadmin/connector_patch_manager-latest/install/install.sh >> install.txt
+    #   args:
+    #     chdir: /usr/local/ezyadmin/connector_patch_manager-latest/install/
+    #   become: True
+    #   ignore_errors: True
     - name: Setup
-      shell: sh /usr/local/ezyadmin/connector_patch_manager-latest/install/install.sh
+      command: sh /usr/local/ezyadmin/connector_patch_manager-latest/install/install.sh > install.log
+      args:
+        chdir: /usr/local/ezyadmin/connector_patch_manager-latest/install
       become: True
       ignore_errors: True
 
@@ -42,7 +50,7 @@
       ignore_errors: True
 
     - name: Update latest version
-      shell: sh /usr/local/ezyadmin/agent/update.sh
+      shell: /usr/local/ezyadmin/agent/update.sh
       become: True
       ignore_errors: True
 
@@ -52,3 +60,4 @@
         hour: "1"
         job: "sleep $((RANDOM%3600)) && /usr/local/ezyadmin/agent/update.sh"
       become: True
+      ignore_errors: True
