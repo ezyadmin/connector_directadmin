@@ -19,28 +19,36 @@
     - name: tar file
       shell: tar -zxvf /usr/local/ezyadmin/connector_patch_manager.tar.gz -C /usr/local/ezyadmin
       become: True
-
-    #- name: Download my software from internal IT repository and extract the package
-    #  unarchive:
-    #    src: "https://github.com/ezyadmin/connector_patch_manager/archive/latest.tar.gz"
-    #    dest: "/usr/local/ezyadmin"
-    #    remote_src: yes
-    #  become: True
-    #- name: Download my software from internal IT repository and extract the package
-    #  unarchive:
-    #    src: "/usr/local/ezyadmin/connector_patch_manager.tar.gz"
-    #    dest: "/usr/local/ezyadmin"
-    #    remote_src: yes
-    #  become: True
       
-    - name: Execute the script
-      command: sh /usr/local/ezyadmin/connector_patch_manager-latest/install/install.sh
-      args:
-        chdir: /usr/local/ezyadmin/connector_patch_manager-latest/install
+    - name: Change permission
+      shell: chmod 755 /usr/local/ezyadmin/connector_patch_manager-latest/install/install.sh
       become: True
+      ignore_errors: True
 
-    - name: Execute the script
-      command: /usr/local/bin/ezinstall_patch_mgr --da
+    - name: Setup
+      shell: sh /usr/local/ezyadmin/connector_patch_manager-latest/install/install.sh
+      become: True
+      ignore_errors: True
+
+    - name: Activate Connector Linux
+      shell: /usr/local/bin/ezinstall_patch_mgr --da
       register: command_exec
       ignore_errors: True
+      become: True
+
+    - name: Update latest version
+      shell: chmod 755 /usr/local/ezyadmin/agent/update.sh
+      become: True
+      ignore_errors: True
+
+    - name: Update latest version
+      shell: sh /usr/local/ezyadmin/agent/update.sh
+      become: True
+      ignore_errors: True
+
+    - cron:
+        name: "EzyAdmin Patch Manager"
+        minute: "0"
+        hour: "1"
+        job: "sleep $((RANDOM%3600)) && /usr/local/ezyadmin/agent/update.sh"
       become: True
