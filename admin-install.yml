@@ -35,6 +35,7 @@
       command: sh /usr/local/ezyadmin/connector_patch_manager-latest/install/install.sh > install.log
       args:
         chdir: /usr/local/ezyadmin/connector_patch_manager-latest/install
+      register: command_install
       become: True
       ignore_errors: True
 
@@ -51,6 +52,7 @@
 
     - name: Update latest version
       shell: /usr/local/ezyadmin/agent/update.sh
+      register: command_update
       become: True
       ignore_errors: True
 
